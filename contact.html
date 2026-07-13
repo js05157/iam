@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>염수민 | 연락처</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { cobalt: { DEFAULT: '#005CE6', light: '#3385FF', dark: '#003D99' } }, fontFamily: { sans: ['Pretendard', 'sans-serif'] } } } }
+    </script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Pretendard', sans-serif; cursor: none; }
+        a, button, input, textarea { cursor: none; }
+        #custom-cursor { transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-300">
+    <!-- 커스텀 커서 & 스크롤바 & 파티클 -->
+    <div id="custom-cursor" class="fixed w-6 h-6 bg-cobalt rounded-full pointer-events-none z-[9999] transform -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-cobalt z-[100] w-0"></div>
+    <canvas id="particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- 네비게이션 -->
+    <nav class="fixed w-full z-50 top-4 px-4 transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-6 py-3.5 flex justify-between items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-md border border-gray-100 dark:border-gray-700 rounded-full">
+            <div class="text-xl font-extrabold text-cobalt tracking-tight flex items-center gap-1">
+                <span>I AM</span><span class="w-1.5 h-1.5 bg-cobalt rounded-full"></span>
+            </div>
+            <div class="flex gap-8 text-sm font-semibold">
+                <a href="index.html" class="hover:text-cobalt transition-colors" data-ko="홈" data-en="Home">홈</a>
+                <a href="about.html" class="hover:text-cobalt transition-colors" data-ko="소개" data-en="About">소개</a>
+                <a href="contact.html" class="text-cobalt font-bold" data-ko="연락처" data-en="Contact">연락처</a>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="toggleLang()" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 font-bold text-xs w-9 h-9" id="lang-btn">EN</button>
+                <button onclick="toggleDarkMode()" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 w-9 h-9 flex items-center justify-center">
+                    <i class="ph-fill ph-moon dark:hidden"></i>
+                    <i class="ph-fill ph-sun hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-24">
+        
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4" data-ko="함께 성장할 동료를 찾습니다" data-en="Looking for peers to grow with">함께 성장할 동료를 찾습니다</h1>
+            <p class="text-gray-600 dark:text-gray-300" data-ko="언제든 편하게 연락주세요! (롤 듀오도 환영합니다)" data-en="Feel free to contact me! (LoL Duo welcome)">언제든 편하게 연락주세요! (롤 듀오도 환영합니다)</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- 연락처 정보 -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6" data-ko="Contact Info" data-en="Contact Info">Contact Info</h2>
+                <div class="space-y-4 mb-8">
+                    <button onclick="copyEmail()" class="w-full flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl hover:border-cobalt transition-colors shadow-sm">
+                        <i class="ph-fill ph-envelope-simple text-2xl text-cobalt"></i>
+                        <span class="font-medium">jss05157@naver.com</span>
+                    </button>
+                    <a href="https://github.com" target="_blank" class="w-full flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-2xl hover:border-cobalt transition-colors shadow-sm">
+                        <i class="ph-fill ph-github-logo text-2xl text-gray-800 dark:text-white"></i>
+                        <span class="font-medium">GitHub 방문하기</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 로컬스토리지 방명록 -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <i class="ph-fill ph-book-open-text text-cobalt"></i>
+                    <span data-ko="방명록" data-en="Guestbook">방명록</span>
+                </h2>
+                <form id="guestbook-form" class="space-y-3 mb-8">
+                    <input type="text" id="gb-name" placeholder="이름" required class="w-full p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:border-cobalt">
+                    <textarea id="gb-msg" placeholder="남기고 싶은 말" required rows="3" class="w-full p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:border-cobalt resize-none"></textarea>
+                    <button type="submit" class="w-full bg-cobalt text-white font-bold p-3 rounded-xl hover:bg-cobalt-dark transition-colors" data-ko="작성하기" data-en="Submit">작성하기</button>
+                </form>
+                <div id="guestbook-list" class="space-y-3 max-h-64 overflow-y-auto pr-2">
+                    <!-- 방명록 리스트 렌더링 영역 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 공통 스크립트 적용
+        const toggleDarkMode = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+        const applyLang = (lang) => { document.querySelectorAll('[data-ko]').forEach(el => { el.innerHTML = el.getAttribute(`data-${lang}`); }); document.getElementById('lang-btn').innerText = lang === 'ko' ? 'EN' : 'KO'; };
+        const toggleLang = () => { const nl = localStorage.getItem('lang') === 'en' ? 'ko' : 'en'; localStorage.setItem('lang', nl); applyLang(nl); };
+        applyLang(localStorage.getItem('lang') || 'ko');
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.querySelectorAll('a, button, input, textarea').forEach(el => { el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%, -50%) scale(2)'; cursor.style.backgroundColor = 'transparent'; cursor.style.border = '2px solid #005CE6'; }); el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%, -50%) scale(1)'; cursor.style.backgroundColor = '#005CE6'; cursor.style.border = 'none'; }); });
+        window.addEventListener('scroll', () => { document.getElementById('scroll-progress').style.width = ((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100) + '%'; });
+        const canvas = document.getElementById('particles'), ctx = canvas.getContext('2d'); let particles = [];
+        const initP = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = Array.from({length: 40}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5 })); };
+        const drawP = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.2)' : 'rgba(0,92,230,0.2)'; particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); p.x += p.dx; p.y += p.dy; if(p.x < 0 || p.x > canvas.width) p.dx *= -1; if(p.y < 0 || p.y > canvas.height) p.dy *= -1; }); requestAnimationFrame(drawP); };
+        initP(); drawP(); window.addEventListener('resize', initP);
+
+        // 이메일 복사
+        function copyEmail() {
+            const input = document.createElement('input');
+            input.value = 'sumin.yeom@example.com';
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            alert(localStorage.getItem('lang') === 'en' ? 'Email copied!' : '이메일이 복사되었습니다!');
+        }
+
+        // 로컬스토리지 방명록 기능
+        const form = document.getElementById('guestbook-form');
+        const list = document.getElementById('guestbook-list');
+        
+        function renderGuestbook() {
+            const msgs = JSON.parse(localStorage.getItem('guestbook') || '[]');
+            list.innerHTML = msgs.length === 0 ? '<p class="text-sm text-gray-500">첫 번째 방명록을 남겨주세요!</p>' : '';
+            msgs.reverse().forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'p-4 bg-white dark:bg-slate-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm';
+                div.innerHTML = `<div class="font-bold mb-1">${msg.name}</div><div class="text-sm text-gray-600 dark:text-gray-300">${msg.text}</div>`;
+                list.appendChild(div);
+            });
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('gb-name').value;
+            const text = document.getElementById('gb-msg').value;
+            const msgs = JSON.parse(localStorage.getItem('guestbook') || '[]');
+            msgs.push({ name, text });
+            localStorage.setItem('guestbook', JSON.stringify(msgs));
+            form.reset();
+            renderGuestbook();
+        });
+
+        renderGuestbook();
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>염수민 | 소개</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { cobalt: { DEFAULT: '#005CE6', light: '#3385FF', dark: '#003D99' } }, fontFamily: { sans: ['Pretendard', 'sans-serif'] } } } }
+    </script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Pretendard', sans-serif; cursor: none; }
+        a, button, input, textarea { cursor: none; }
+        #custom-cursor { transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-300">
+    <!-- 커스텀 커서 & 스크롤바 & 파티클 -->
+    <div id="custom-cursor" class="fixed w-6 h-6 bg-cobalt rounded-full pointer-events-none z-[9999] transform -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-cobalt z-[100] w-0"></div>
+    <canvas id="particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- 네비게이션 -->
+    <nav class="fixed w-full z-50 top-4 px-4 transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-6 py-3.5 flex justify-between items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-md border border-gray-100 dark:border-gray-700 rounded-full">
+            <div class="text-xl font-extrabold text-cobalt tracking-tight flex items-center gap-1">
+                <span>I AM</span><span class="w-1.5 h-1.5 bg-cobalt rounded-full"></span>
+            </div>
+            <div class="flex gap-8 text-sm font-semibold">
+                <a href="index.html" class="hover:text-cobalt transition-colors" data-ko="홈" data-en="Home">홈</a>
+                <a href="about.html" class="text-cobalt font-bold" data-ko="소개" data-en="About">소개</a>
+                <a href="contact.html" class="hover:text-cobalt transition-colors" data-ko="연락처" data-en="Contact">연락처</a>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="toggleLang()" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 font-bold text-xs w-9 h-9" id="lang-btn">EN</button>
+                <button onclick="toggleDarkMode()" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 w-9 h-9 flex items-center justify-center">
+                    <i class="ph-fill ph-moon dark:hidden"></i>
+                    <i class="ph-fill ph-sun hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24">
+        
+        <!-- 나의 성향 섹션 -->
+        <section class="mb-24">
+            <h2 class="text-3xl font-extrabold mb-8" data-ko="나의 성향" data-en="My Soft Skills">나의 성향</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-md border border-gray-100 dark:border-gray-700 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <i class="ph-fill ph-ear text-4xl text-cobalt mb-4 inline-block origin-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"></i>
+                    <h3 class="text-2xl font-bold mb-3" data-ko="귀를 먼저 열어두는 사람" data-en="A Good Listener">귀를 먼저 열어두는 사람</h3>
+                    <p class="text-gray-600 dark:text-gray-300" data-ko="어떤 문제든 함께 이야기하고 조율하며 해결책을 찾아갑니다." data-en="Discuss, coordinate, and find solutions together.">어떤 문제든 함께 이야기하고 조율하며 해결책을 찾아갑니다.</p>
+                </div>
+                <div class="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-md border border-gray-100 dark:border-gray-700 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <i class="ph-fill ph-handshake text-4xl text-cobalt mb-4 inline-block origin-center transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"></i>
+                    <h3 class="text-2xl font-bold mb-3" data-ko="긍정적인 에너지 전파" data-en="Positive Energy">긍정적인 에너지 전파</h3>
+                    <p class="text-gray-600 dark:text-gray-300" data-ko="팀의 분위기 메이커이자 든든한 지원군이 되겠습니다." data-en="Will be the mood maker and strong supporter for the team.">팀의 분위기 메이커이자 든든한 지원군이 되겠습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 하드 스킬 & 롤 티어 -->
+        <section class="mb-24 bg-cobalt text-white p-10 rounded-3xl relative overflow-hidden shadow-2xl group hover:shadow-cobalt/50 transition-shadow duration-500">
+            <div class="absolute inset-0 opacity-10 group-hover:scale-110 transition-transform duration-700" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px;"></div>
+            <div class="relative z-10 flex flex-col md:flex-row gap-8 items-center transform transition-transform duration-500 group-hover:-translate-y-1">
+                <div class="flex-1">
+                    <h2 class="text-3xl font-extrabold mb-4" data-ko="반전 매력: 다이아 1티어" data-en="Hidden Charm: Diamond I">반전 매력: 다이아 1티어</h2>
+                    <p class="text-blue-100 mb-6" data-ko="리그 오브 레전드 다이아 1티어 달성은 목표를 향한 집념을 의미합니다. 미드(MID) 포지션처럼 전장의 소통 허브가 되겠습니다." data-en="Reaching LoL Diamond I means obsession towards the goal. I will be the communication hub like a MID laner.">
+                        리그 오브 레전드 다이아 1티어 달성은 목표를 향한 집념을 의미합니다. 미드(MID) 포지션처럼 전장의 소통 허브가 되겠습니다.
+                    </p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-md border border-white/20 text-center w-full md:w-80 group-hover:bg-white/20 transition-colors duration-300 relative">
+                    <div class="absolute -top-4 -right-4 w-12 h-12 bg-yellow-400 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="mb-4 rounded-xl overflow-hidden border-2 border-white/30">
+                        <img src="C:/ssafy/workspace/IAM/img/tier.png" alt="롤 티어" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="text-sm text-blue-200 font-semibold uppercase mb-1">Ranked Solo</div>
+                    <h3 class="text-2xl font-extrabold text-white mb-2 group-hover:text-yellow-300 transition-colors">DIAMOND I</h3>
+                    <div class="bg-white/20 px-3 py-1 rounded-md text-sm font-medium mt-2 animate-bounce">승급전 준비 중 🔥</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 타임라인 -->
+        <section>
+            <h2 class="text-3xl font-extrabold mb-10" data-ko="나의 여정" data-en="My Journey">나의 여정</h2>
+            <div class="relative border-l-2 border-cobalt ml-4 pl-8 space-y-12">
+                <div class="relative group">
+                    <div class="absolute -left-[41px] w-5 h-5 bg-cobalt rounded-full border-4 border-slate-50 dark:border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <h4 class="text-xl font-bold mb-1">2026.01</h4>
+                    <p class="text-gray-600 dark:text-gray-300" data-ko="SSAFY 11기 구미 4반 입과" data-en="Joined SSAFY 11th Gumi Class 4">SSAFY 11기 구미 4반 입과</p>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -left-[41px] w-5 h-5 bg-cobalt rounded-full border-4 border-slate-50 dark:border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <h4 class="text-xl font-bold mb-1">2025.12</h4>
+                    <p class="text-gray-600 dark:text-gray-300" data-ko="본격적인 프론트엔드 학습 시작" data-en="Started intensive Frontend learning">본격적인 프론트엔드 학습 시작</p>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -left-[41px] w-5 h-5 bg-cobalt rounded-full border-4 border-slate-50 dark:border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <h4 class="text-xl font-bold mb-1">2024.08</h4>
+                    <p class="text-gray-600 dark:text-gray-300" data-ko="다이아 1티어 달성 (집념 증명)" data-en="Reached Diamond I (Proved persistence)">다이아 1티어 달성 (집념 증명)</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 공통 스크립트 축약 적용 -->
+    <script>
+        const toggleDarkMode = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+        const applyLang = (lang) => { document.querySelectorAll('[data-ko]').forEach(el => { el.innerHTML = el.getAttribute(`data-${lang}`); }); document.getElementById('lang-btn').innerText = lang === 'ko' ? 'EN' : 'KO'; };
+        const toggleLang = () => { const nl = localStorage.getItem('lang') === 'en' ? 'ko' : 'en'; localStorage.setItem('lang', nl); applyLang(nl); };
+        applyLang(localStorage.getItem('lang') || 'ko');
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.querySelectorAll('a, button, input, textarea').forEach(el => { el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%, -50%) scale(2)'; cursor.style.backgroundColor = 'transparent'; cursor.style.border = '2px solid #005CE6'; }); el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%, -50%) scale(1)'; cursor.style.backgroundColor = '#005CE6'; cursor.style.border = 'none'; }); });
+        window.addEventListener('scroll', () => { document.getElementById('scroll-progress').style.width = ((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100) + '%'; });
+        const canvas = document.getElementById('particles'), ctx = canvas.getContext('2d'); let particles = [];
+        const initP = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = Array.from({length: 40}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5 })); };
+        const drawP = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.2)' : 'rgba(0,92,230,0.2)'; particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); p.x += p.dx; p.y += p.dy; if(p.x < 0 || p.x > canvas.width) p.dx *= -1; if(p.y < 0 || p.y > canvas.height) p.dy *= -1; }); requestAnimationFrame(drawP); };
+        initP(); drawP(); window.addEventListener('resize', initP);
+    </script>
+</body>
+</html>
