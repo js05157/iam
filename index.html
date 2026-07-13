@@ -1,13 +1,205 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>염수민 | 홈</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { cobalt: { DEFAULT: '#005CE6', light: '#3385FF', dark: '#003D99' } },
+                    fontFamily: { sans: ['Pretendard', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Pretendard', sans-serif; cursor: none; }
+        a, button, input, textarea { cursor: none; }
+        #custom-cursor { transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+    </style>
 </head>
-<body>
-    Hello World<br>
-    Hello SSAFY<br>
-    Hello Gumi
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-300">
+    <!-- 커스텀 커서 -->
+    <div id="custom-cursor" class="fixed w-6 h-6 bg-cobalt rounded-full pointer-events-none z-[9999] transform -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
+    <!-- 스크롤 진행률 바 -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-cobalt z-[100] w-0"></div>
+    <!-- 파티클 캔버스 -->
+    <canvas id="particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- 네비게이션 -->
+    <nav class="fixed w-full z-50 top-4 px-4 transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-6 py-3.5 flex justify-between items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-md border border-gray-100 dark:border-gray-700 rounded-full">
+            <div class="text-xl font-extrabold text-cobalt tracking-tight flex items-center gap-1">
+                <span>I AM</span><span class="w-1.5 h-1.5 bg-cobalt rounded-full"></span>
+            </div>
+            <div class="flex gap-8 text-sm font-semibold">
+                <a href="index.html" class="text-cobalt font-bold" data-ko="홈" data-en="Home">홈</a>
+                <a href="about.html" class="hover:text-cobalt transition-colors" data-ko="소개" data-en="About">소개</a>
+                <a href="contact.html" class="hover:text-cobalt transition-colors" data-ko="연락처" data-en="Contact">연락처</a>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="toggleLang()" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 font-bold text-xs w-9 h-9" id="lang-btn">EN</button>
+                <button onclick="toggleDarkMode()" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 w-9 h-9 flex items-center justify-center">
+                    <i class="ph-fill ph-moon dark:hidden"></i>
+                    <i class="ph-fill ph-sun hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
+        <!-- 이스터에그 게임 트리거 -->
+        <button id="easter-egg" class="fixed bottom-6 right-6 w-14 h-14 bg-cobalt text-white rounded-full shadow-xl flex items-center justify-center text-2xl hover:scale-110 transition-transform z-50">
+            🎮
+        </button>
+
+        <!-- 미니게임 (에임 연습) 모달 -->
+        <div id="game-modal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex-col items-center justify-center text-white">
+            <div class="flex justify-between w-full max-w-2xl px-4 mb-4">
+                <div class="text-2xl font-bold">Score: <span id="game-score">0</span></div>
+                <div class="text-2xl font-bold">Time: <span id="game-time">10</span>s</div>
+            </div>
+            <div id="game-area" class="relative w-full max-w-2xl h-[60vh] bg-slate-800 rounded-2xl border-2 border-cobalt overflow-hidden cursor-crosshair">
+                <div id="game-start-btn" class="absolute inset-0 flex items-center justify-center bg-slate-900/80 cursor-pointer hover:text-cobalt text-3xl font-bold transition-colors">
+                    클릭하여 시작 (에임 연습)
+                </div>
+                <div id="game-target" class="absolute w-12 h-12 bg-red-500 rounded-full hidden hover:bg-red-400 border-2 border-white shadow-[0_0_15px_rgba(239,68,68,0.7)]"></div>
+            </div>
+            <button onclick="closeGame()" class="mt-6 px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-gray-200 cursor-pointer">닫기</button>
+        </div>
+        
+        <div class="text-center max-w-3xl mx-auto mt-20">
+            <div class="inline-block bg-cobalt/10 text-cobalt px-4 py-1.5 rounded-full text-sm font-bold mb-6" data-ko="구미 4반" data-en="Gumi Class 4">구미 4반</div>
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 tracking-tight">
+                <span data-ko="곁에 두고 싶은" data-en="The Positive Energy">곁에 두고 싶은</span><br>
+                <span data-ko="긍정 에너지," data-en="You Want Nearby,">긍정 에너지,</span> <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cobalt to-cyan-400" data-ko="염수민입니다." data-en="I'm Sumin Yeom.">염수민입니다.</span>
+            </h1>
+            <a href="about.html" class="inline-block bg-cobalt text-white px-8 py-4 rounded-full font-bold hover:bg-cobalt-dark transition-transform hover:-translate-y-1 shadow-lg" data-ko="더 알아보기" data-en="Learn More">더 알아보기</a>
+        </div>
+    </main>
+
+    <script>
+        // 공통 기능: 다크모드
+        const toggleDarkMode = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // 공통 기능: 다국어
+        const applyLang = (lang) => {
+            document.querySelectorAll('[data-ko]').forEach(el => { el.innerHTML = el.getAttribute(`data-${lang}`); });
+            document.getElementById('lang-btn').innerText = lang === 'ko' ? 'EN' : 'KO';
+        };
+        const toggleLang = () => {
+            const newLang = localStorage.getItem('lang') === 'en' ? 'ko' : 'en';
+            localStorage.setItem('lang', newLang);
+            applyLang(newLang);
+        };
+        applyLang(localStorage.getItem('lang') || 'ko');
+
+        // 공통 기능: 커스텀 커서 & 호버 효과
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button, input, textarea, #easter-egg').forEach(el => {
+            el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%, -50%) scale(2)'; cursor.style.backgroundColor = 'transparent'; cursor.style.border = '2px solid #005CE6'; });
+            el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%, -50%) scale(1)'; cursor.style.backgroundColor = '#005CE6'; cursor.style.border = 'none'; });
+        });
+
+        // 공통 기능: 스크롤 바
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        // 공통 기능: 파티클
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const initParticles = () => {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            particles = Array.from({length: 40}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5 }));
+        };
+        const drawParticles = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.2)' : 'rgba(0,92,230,0.2)';
+            particles.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+                p.x += p.dx; p.y += p.dy;
+                if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            });
+            requestAnimationFrame(drawParticles);
+        };
+        initParticles(); drawParticles(); window.addEventListener('resize', initParticles);
+
+        // 게이미피케이션 (에임 연습 게임)
+        const gameModal = document.getElementById('game-modal');
+        const gameArea = document.getElementById('game-area');
+        const gameTarget = document.getElementById('game-target');
+        const startBtn = document.getElementById('game-start-btn');
+        const scoreEl = document.getElementById('game-score');
+        const timeEl = document.getElementById('game-time');
+        let score = 0, timeLeft = 10, gameInterval;
+
+        document.getElementById('easter-egg').addEventListener('click', () => {
+            gameModal.classList.remove('hidden');
+            gameModal.classList.add('flex');
+        });
+
+        function closeGame() {
+            gameModal.classList.add('hidden');
+            gameModal.classList.remove('flex');
+            clearInterval(gameInterval);
+            startBtn.classList.remove('hidden');
+            gameTarget.classList.add('hidden');
+        }
+
+        startBtn.addEventListener('click', () => {
+            score = 0; timeLeft = 10;
+            scoreEl.innerText = score; timeEl.innerText = timeLeft;
+            startBtn.classList.add('hidden');
+            gameTarget.classList.remove('hidden');
+            moveTarget();
+            
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                timeEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(gameInterval);
+                    gameTarget.classList.add('hidden');
+                    startBtn.classList.remove('hidden');
+                    startBtn.innerText = `종료! 점수: ${score} - 다시 시작`;
+                }
+            }, 1000);
+        });
+
+        gameTarget.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+            score++;
+            scoreEl.innerText = score;
+            moveTarget();
+        });
+
+        function moveTarget() {
+            const maxX = gameArea.clientWidth - 48;
+            const maxY = gameArea.clientHeight - 48;
+            gameTarget.style.left = Math.random() * maxX + 'px';
+            gameTarget.style.top = Math.random() * maxY + 'px';
+        }
+    </script>
 </body>
 </html>
